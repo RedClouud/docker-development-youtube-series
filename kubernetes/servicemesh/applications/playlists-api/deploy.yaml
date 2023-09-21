@@ -49,11 +49,11 @@ spec:
       port: 80
       targetPort: 10010
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    spec.ingressClassName: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   name: playlists-api
@@ -63,8 +63,12 @@ spec:
     http:
       paths:
       - path: /api/playlists(/|$)(.*)
+        pathType: Prefix
         backend:
-          serviceName: playlists-api
-          servicePort: 80
+          service:
+            name: playlists-api
+            port:
+              number: 80
+
 
 
